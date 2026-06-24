@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 23, 2026 at 06:13 AM
+-- Generation Time: Jun 24, 2026 at 07:41 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -71,6 +71,7 @@ INSERT INTO `coordinators` (`user_id`, `name`, `designation`, `department`) VALU
 CREATE TABLE `deadlines` (
   `id` int(11) NOT NULL,
   `stage` enum('Proposal Submission','Proposal Defence Presentation','FYP Progress Presentation','Final Presentation') NOT NULL,
+  `department` varchar(100) NOT NULL DEFAULT 'Software Engineering',
   `deadline_date` datetime NOT NULL,
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `status` enum('Active','Inactive') DEFAULT 'Inactive'
@@ -80,9 +81,10 @@ CREATE TABLE `deadlines` (
 -- Dumping data for table `deadlines`
 --
 
-INSERT INTO `deadlines` (`id`, `stage`, `deadline_date`, `updated_at`, `status`) VALUES
-(3, 'FYP Progress Presentation', '2026-12-15 23:59:00', '2026-06-19 12:16:12', 'Active'),
-(22, 'Proposal Defence Presentation', '2026-06-22 20:20:00', '2026-06-22 15:16:42', 'Active');
+INSERT INTO `deadlines` (`id`, `stage`, `department`, `deadline_date`, `updated_at`, `status`) VALUES
+(3, 'FYP Progress Presentation', 'Software Engineering', '2026-12-15 23:59:00', '2026-06-19 12:16:12', 'Active'),
+(22, 'Proposal Defence Presentation', 'Software Engineering', '2026-06-22 20:20:00', '2026-06-22 15:16:42', 'Active'),
+(23, 'Final Presentation', 'Information Technology', '2026-06-24 18:40:00', '2026-06-23 12:40:17', 'Active');
 
 -- --------------------------------------------------------
 
@@ -112,7 +114,8 @@ INSERT INTO `evaluations` (`id`, `group_id`, `evaluator_id`, `stage`, `marks_det
 (5, 4, 4, 'FYP Progress Presentation', '{}', 0.00, NULL, '2027-07-23 11:33:00', '2026-06-18 05:05:44', 1),
 (50, 1, 10015, 'Proposal Defence Presentation', '{\"problem_solution\":5,\"literature_feasibility\":5,\"presentation_viva\":5}', 15.00, '', NULL, '2026-06-19 12:20:14', 1),
 (51, 1, 4, 'FYP Progress Presentation', '{\"understanding\":10,\"technical_knowledge\":9,\"implementation_progress\":5,\"presentation_qa\":10}', 34.00, '', NULL, '2026-06-23 03:42:42', 1),
-(52, 1, 4, 'Final Presentation', '{\"project_demo\":23,\"thesis\":25,\"presentation\":20}', 68.00, '', NULL, '2026-06-23 03:43:04', 1);
+(52, 1, 4, 'Final Presentation', '{\"project_demo\":23,\"thesis\":25,\"presentation\":20}', 68.00, '', NULL, '2026-06-23 03:43:04', 1),
+(53, 4, 4, 'Proposal Defence Presentation', '{\"problem_solution\":10,\"literature_feasibility\":10,\"presentation_viva\":10}', 30.00, '', NULL, '2026-06-23 17:02:24', 1);
 
 -- --------------------------------------------------------
 
@@ -140,8 +143,8 @@ CREATE TABLE `grades` (
 --
 
 INSERT INTO `grades` (`group_id`, `proposal_marks`, `total_marks`, `percentage`, `grade`, `status`, `calculated_at`, `proposal_defense_marks`, `progress_presentation_marks`, `final_presentation_marks`, `supervision_marks`, `show_supervision_to_student`) VALUES
-(1, 10.00, 165.00, 83.00, 'A', 'Pass', '2026-06-23 03:43:04', 23.00, 34.00, 68.00, 30.00, 1),
-(4, 10.00, 10.00, 5.00, 'F', 'Fail', '2026-06-22 15:18:32', NULL, NULL, NULL, NULL, 1);
+(1, 10.00, 165.00, 83.00, 'A', 'Pass', '2026-06-23 10:30:01', 23.00, 34.00, 68.00, 30.00, 1),
+(4, 10.00, 52.00, 26.00, 'F', 'Fail', '2026-06-23 17:02:24', 30.00, NULL, NULL, 12.00, 1);
 
 -- --------------------------------------------------------
 
@@ -163,7 +166,7 @@ CREATE TABLE `groups` (
 
 INSERT INTO `groups` (`id`, `group_code`, `created_by`, `progress_stage`, `created_at`) VALUES
 (1, '2k23-SWEM-1', 15, 'Final Grading Completed', '2026-06-15 15:54:27'),
-(4, '2K24-SWEM-1', 18, 'Proposal Submitted', '2026-06-18 04:18:57');
+(4, '2K24-SWEM-1', 18, 'Proposal Defence Presentation Completed', '2026-06-18 04:18:57');
 
 -- --------------------------------------------------------
 
@@ -205,7 +208,7 @@ CREATE TABLE `hods` (
 --
 
 INSERT INTO `hods` (`user_id`, `name`, `department`) VALUES
-(2, 'Dr. Arifa Bhutto', 'Software Engineering');
+(2, 'Arifa Bhutto', 'Software Engineering');
 
 -- --------------------------------------------------------
 
@@ -435,7 +438,7 @@ INSERT INTO `notifications` (`id`, `user_id`, `title`, `message`, `is_read`, `cr
 (219, 2, 'New Department Notice', 'Notice: Extension of Final Year Project (FYP) Proposal Submission Date. Click to view.', 1, '2026-06-20 07:41:39', '/notice/view?id=11'),
 (226, 11, 'Proposal Submitted', 'Group 2K24-SWEM-1 has submitted a project proposal selecting you as supervisor.', 1, '2026-06-21 14:26:13', NULL),
 (228, 2, 'Proposal Submitted', 'Group 2K24-SWEM-1 has submitted a project proposal.', 1, '2026-06-21 14:26:13', NULL),
-(229, 1, 'New Student Registration', 'Student Adil (2k23/SWE/013) registered and is pending approval.', 0, '2026-06-22 08:12:43', NULL),
+(229, 1, 'New Student Registration', 'Student Adil (2k23/SWE/013) registered and is pending approval.', 1, '2026-06-22 08:12:43', NULL),
 (230, 9, 'Deadline Updated', 'The deadline for Proposal Defence Presentation has been updated to 2026-06-22T20:20.', 0, '2026-06-22 15:16:42', NULL),
 (231, 10, 'Deadline Updated', 'The deadline for Proposal Defence Presentation has been updated to 2026-06-22T20:20.', 0, '2026-06-22 15:16:42', NULL),
 (232, 5, 'Deadline Updated', 'The deadline for Proposal Defence Presentation has been updated to 2026-06-22T20:20.', 0, '2026-06-22 15:16:42', NULL),
@@ -445,7 +448,7 @@ INSERT INTO `notifications` (`id`, `user_id`, `title`, `message`, `is_read`, `cr
 (236, 7, 'Deadline Updated', 'The deadline for Proposal Defence Presentation has been updated to 2026-06-22T20:20.', 0, '2026-06-22 15:16:42', NULL),
 (237, 15, 'Deadline Updated', 'The deadline for Proposal Defence Presentation has been updated to 2026-06-22T20:20.', 0, '2026-06-22 15:16:42', NULL),
 (238, 16, 'Deadline Updated', 'The deadline for Proposal Defence Presentation has been updated to 2026-06-22T20:20.', 0, '2026-06-22 15:16:42', NULL),
-(239, 18, 'Deadline Updated', 'The deadline for Proposal Defence Presentation has been updated to 2026-06-22T20:20.', 0, '2026-06-22 15:16:42', NULL),
+(239, 18, 'Deadline Updated', 'The deadline for Proposal Defence Presentation has been updated to 2026-06-22T20:20.', 1, '2026-06-22 15:16:42', NULL),
 (240, 14, 'Marks Awarded', 'Evaluation marks for FYP Progress Presentation have been published.', 0, '2026-06-23 03:42:42', NULL),
 (241, 15, 'Marks Awarded', 'Evaluation marks for FYP Progress Presentation have been published.', 0, '2026-06-23 03:42:42', NULL),
 (242, 16, 'Marks Awarded', 'Evaluation marks for FYP Progress Presentation have been published.', 0, '2026-06-23 03:42:42', NULL),
@@ -454,7 +457,37 @@ INSERT INTO `notifications` (`id`, `user_id`, `title`, `message`, `is_read`, `cr
 (245, 16, 'Marks Awarded', 'Evaluation marks for Final Presentation have been published.', 0, '2026-06-23 03:43:04', NULL),
 (246, 14, 'Marks Awarded', 'Evaluation marks for Final Presentation have been published.', 0, '2026-06-23 03:43:06', NULL),
 (247, 15, 'Marks Awarded', 'Evaluation marks for Final Presentation have been published.', 0, '2026-06-23 03:43:06', NULL),
-(248, 16, 'Marks Awarded', 'Evaluation marks for Final Presentation have been published.', 0, '2026-06-23 03:43:06', NULL);
+(248, 16, 'Marks Awarded', 'Evaluation marks for Final Presentation have been published.', 0, '2026-06-23 03:43:06', NULL),
+(249, 18, 'Supervisor Marks Updated', 'Your supervisor has updated your manual evaluation marks.', 1, '2026-06-23 09:41:08', NULL),
+(250, 14, 'Supervisor Marks Updated', 'Your supervisor has updated your manual evaluation marks.', 0, '2026-06-23 09:41:15', NULL),
+(251, 15, 'Supervisor Marks Updated', 'Your supervisor has updated your manual evaluation marks.', 0, '2026-06-23 09:41:15', NULL),
+(252, 16, 'Supervisor Marks Updated', 'Your supervisor has updated your manual evaluation marks.', 0, '2026-06-23 09:41:15', NULL),
+(253, 14, 'Supervisor Marks Updated', 'Your supervisor has updated your manual evaluation marks.', 0, '2026-06-23 10:01:12', NULL),
+(254, 15, 'Supervisor Marks Updated', 'Your supervisor has updated your manual evaluation marks.', 0, '2026-06-23 10:01:12', NULL),
+(255, 16, 'Supervisor Marks Updated', 'Your supervisor has updated your manual evaluation marks.', 0, '2026-06-23 10:01:12', NULL),
+(256, 14, 'Supervisor Marks Updated', 'Your supervisor has updated your manual evaluation marks.', 0, '2026-06-23 10:01:41', NULL),
+(257, 15, 'Supervisor Marks Updated', 'Your supervisor has updated your manual evaluation marks.', 0, '2026-06-23 10:01:41', NULL),
+(258, 16, 'Supervisor Marks Updated', 'Your supervisor has updated your manual evaluation marks.', 0, '2026-06-23 10:01:41', NULL),
+(259, 14, 'Supervisor Marks Updated', 'Your supervisor has updated your manual evaluation marks.', 0, '2026-06-23 10:01:57', NULL),
+(260, 15, 'Supervisor Marks Updated', 'Your supervisor has updated your manual evaluation marks.', 0, '2026-06-23 10:01:57', NULL),
+(261, 16, 'Supervisor Marks Updated', 'Your supervisor has updated your manual evaluation marks.', 0, '2026-06-23 10:01:57', NULL),
+(262, 14, 'Supervisor Marks Updated', 'Your supervisor has updated your manual evaluation marks.', 0, '2026-06-23 10:05:59', NULL),
+(263, 15, 'Supervisor Marks Updated', 'Your supervisor has updated your manual evaluation marks.', 0, '2026-06-23 10:05:59', NULL),
+(264, 16, 'Supervisor Marks Updated', 'Your supervisor has updated your manual evaluation marks.', 0, '2026-06-23 10:05:59', NULL),
+(265, 14, 'Supervisor Marks Updated', 'Your supervisor has updated your manual evaluation marks.', 0, '2026-06-23 10:06:05', NULL),
+(266, 15, 'Supervisor Marks Updated', 'Your supervisor has updated your manual evaluation marks.', 0, '2026-06-23 10:06:05', NULL),
+(267, 16, 'Supervisor Marks Updated', 'Your supervisor has updated your manual evaluation marks.', 0, '2026-06-23 10:06:05', NULL),
+(268, 14, 'Supervisor Marks Updated', 'Your supervisor has updated your manual evaluation marks.', 0, '2026-06-23 10:19:05', NULL),
+(269, 15, 'Supervisor Marks Updated', 'Your supervisor has updated your manual evaluation marks.', 0, '2026-06-23 10:19:05', NULL),
+(270, 16, 'Supervisor Marks Updated', 'Your supervisor has updated your manual evaluation marks.', 0, '2026-06-23 10:19:05', NULL),
+(271, 14, 'Supervisor Marks Updated', 'Your supervisor has updated your manual evaluation marks.', 0, '2026-06-23 10:19:23', NULL),
+(272, 15, 'Supervisor Marks Updated', 'Your supervisor has updated your manual evaluation marks.', 0, '2026-06-23 10:19:23', NULL),
+(273, 16, 'Supervisor Marks Updated', 'Your supervisor has updated your manual evaluation marks.', 0, '2026-06-23 10:19:23', NULL),
+(274, 14, 'Supervisor Marks Updated', 'Your supervisor has updated your manual evaluation marks.', 0, '2026-06-23 10:30:01', NULL),
+(275, 15, 'Supervisor Marks Updated', 'Your supervisor has updated your manual evaluation marks.', 0, '2026-06-23 10:30:01', NULL),
+(276, 16, 'Supervisor Marks Updated', 'Your supervisor has updated your manual evaluation marks.', 0, '2026-06-23 10:30:01', NULL),
+(277, 18, 'Proposal Reviewed', 'Your project proposal has been Approved by your supervisor.', 1, '2026-06-23 11:08:29', NULL),
+(278, 18, 'Marks Awarded', 'Evaluation marks for Proposal Defence Presentation have been published.', 0, '2026-06-23 17:02:24', NULL);
 
 -- --------------------------------------------------------
 
@@ -490,13 +523,13 @@ CREATE TABLE `profiles` (
 --
 
 INSERT INTO `profiles` (`user_id`, `prefix`, `surname`, `cnic`, `cnic_expiry`, `father_name`, `dob`, `mobile_code`, `mobile_no`, `place_of_birth`, `country`, `province_state`, `district`, `city`, `home_address`, `permanent_address`, `zip_code`, `blood_group`, `gender`, `updated_at`) VALUES
-(2, 'Dr.', 'Dr. Arifa Bhutto', '2222222222222', NULL, NULL, '2000-01-01', '+92', '3238962010', NULL, NULL, NULL, NULL, NULL, 'Jamshoro', NULL, NULL, NULL, 'Male', '2026-06-22 15:37:31'),
+(2, 'Dr.', 'Arifa Bhutto', '2222222222222', NULL, NULL, '2000-01-01', '+92', '3238962010', NULL, NULL, NULL, NULL, NULL, 'Jamshoro', NULL, NULL, NULL, 'Male', '2026-06-23 13:22:39'),
 (4, 'Mr.', 'Soomro', '4444444444444', NULL, NULL, '1980-01-01', '+92', '3123451234', NULL, NULL, NULL, NULL, NULL, 'Hyderabad', NULL, NULL, NULL, 'Male', '2026-06-22 11:32:42'),
 (11, 'Prof.', 'Qabulio', '1122233333334', NULL, NULL, '1980-01-01', '+92', '3238962017', NULL, NULL, NULL, NULL, NULL, 'Hyerabad', NULL, NULL, NULL, 'Male', '2026-06-22 11:34:50'),
-(14, 'Mr.', 'Soomro', '4310284725235', NULL, 'Ghulam Muhammad', '2000-01-01', '+92', '3378001160', NULL, 'Pakistan', 'Sindh', 'jacobabad', NULL, 'Not Provided Yet', NULL, NULL, NULL, 'Male', '2026-06-15 12:08:40'),
+(14, 'Mr.', 'Soomro', '4310284725235', '2029-02-28', 'Ghulam Muhammad', '2005-03-08', '+92', '3378001160', NULL, 'Pakistan', 'Sindh', 'jacobabad', 'Hyderabad', 'Somra Muhalla Jacobabad', 'Somra Muhalla Jacobabad', NULL, 'A+', 'Male', '2026-06-23 09:54:34'),
 (15, 'Mr.', 'Memon', '1234567891111', NULL, 'Shafi Muhammad', '2006-06-13', '+92', '3333333333', 'Jacobabad', 'Pakistan', 'Sindh', 'jacobabad', 'Hyderabad', 'Latifabad, Phase 1, Hyderabad', 'Latifabad, Phase 1, Hyderabad', '72000', 'A+', 'Other', '2026-06-18 03:56:10'),
 (16, 'Mr.', 'Something', '4310284725230', NULL, 'Someone', '2000-01-01', '+92', '3000000000', NULL, 'Pakistan', 'Sindh', 'Hyderabad', NULL, 'Not Provided Yet', NULL, NULL, NULL, 'Male', '2026-06-16 18:47:41'),
-(18, 'Ms.', 'Khanzada', '4310284725000', NULL, 'Khalid', '2005-06-23', '+92', '3012345678', 'Jacobabad', 'Pakistan', 'Sindh', 'Hyderabad', 'Hyderabad', 'Latifabad, Phase 1, Hyderabad', 'Latifabad, Phase 1, Hyderabad', '72000', 'B-', 'Female', '2026-06-21 18:42:39'),
+(18, 'Ms.', 'Akash', '4310284725000', NULL, 'Khalid', '2005-06-23', '+92', '3012345678', 'Jacobabad', 'Pakistan', 'Sindh', 'Hyderabad', 'Hyderabad', 'Latifabad, Phase 1, Hyderabad', 'Latifabad, Phase 1, Hyderabad', '72000', 'B-', 'Female', '2026-06-23 13:24:25'),
 (10016, 'Prof.', 'Prof. Mumtaz', '5555555555556', NULL, NULL, '1985-01-01', '+92', '3780011600', NULL, NULL, NULL, NULL, NULL, 'Latifabad, Phase 1, Hyderabad', NULL, NULL, NULL, 'Male', '2026-06-22 11:40:35'),
 (10025, 'Mr.', 'Soomro', '4310284720000', NULL, 'Raheem ud Din', '2000-01-01', '+92', '03123456678', NULL, 'Pakistan', 'Sindh', 'jacobabad', NULL, 'Not Provided Yet', NULL, NULL, NULL, 'Male', '2026-06-22 08:12:43');
 
@@ -522,7 +555,7 @@ CREATE TABLE `projects` (
 
 INSERT INTO `projects` (`id`, `group_id`, `supervisor_id`, `title`, `description`, `status`, `created_at`) VALUES
 (1, 1, 11, 'Learning Platform', 'Platform where student will learn new skills with low cost. here is the revised', 'Approved', '2026-06-15 15:54:27'),
-(2, 4, 11, 'Web-Based Gym Management System', 'The fitness industry is experiencing rapid growth, yet many independent gymnasiums and fitness centers still rely on fragmented, manual, or paper-based systems for member management, billing, and scheduling. This reliance on outdated methods frequently leads to administrative inefficiencies, scheduling conflicts, and poor data tracking. This project proposes the development of a centralized, web-based Gym Management System designed to streamline daily operations and enhance the overall member experience.\r\n\r\nThe proposed system will feature secure, role-based dashboards tailored for administrators, trainers, and gym members. Core functionalities will include real-time membership lifecycle tracking, automated billing and subscription management, an interactive class booking workflow, and attendance monitoring. Built on a modern full-stack architecture—utilizing a responsive frontend for intuitive user navigation and a robust backend integrated with a relational database—the application ensures high data integrity and seamless scalability. By digitizing and automating these core processes, the system aims to significantly reduce administrative overhead, optimize facility resource allocation, and provide gym owners with actionable insights to drive business growth.', 'Submitted', '2026-06-18 04:18:57');
+(2, 4, 11, 'Web-Based Gym Management System', 'The fitness industry is experiencing rapid growth, yet many independent gymnasiums and fitness centers still rely on fragmented, manual, or paper-based systems for member management, billing, and scheduling. This reliance on outdated methods frequently leads to administrative inefficiencies, scheduling conflicts, and poor data tracking. This project proposes the development of a centralized, web-based Gym Management System designed to streamline daily operations and enhance the overall member experience.\r\n\r\nThe proposed system will feature secure, role-based dashboards tailored for administrators, trainers, and gym members. Core functionalities will include real-time membership lifecycle tracking, automated billing and subscription management, an interactive class booking workflow, and attendance monitoring. Built on a modern full-stack architecture—utilizing a responsive frontend for intuitive user navigation and a robust backend integrated with a relational database—the application ensures high data integrity and seamless scalability. By digitizing and automating these core processes, the system aims to significantly reduce administrative overhead, optimize facility resource allocation, and provide gym owners with actionable insights to drive business growth.', 'Approved', '2026-06-18 04:18:57');
 
 -- --------------------------------------------------------
 
@@ -547,7 +580,7 @@ CREATE TABLE `proposals` (
 
 INSERT INTO `proposals` (`id`, `group_id`, `abstract`, `file_path`, `status`, `feedback`, `submitted_at`, `updated_at`) VALUES
 (1, 1, 'Platform where student will learn new skills with low cost. here is the revised', '/uploads/proposals/1781618353_BPE.docx', 'Approved', 'please make it more unique', '2026-06-16 13:59:13', '2026-06-16 13:59:46'),
-(4, 4, 'The fitness industry is experiencing rapid growth, yet many independent gymnasiums and fitness centers still rely on fragmented, manual, or paper-based systems for member management, billing, and scheduling. This reliance on outdated methods frequently leads to administrative inefficiencies, scheduling conflicts, and poor data tracking. This project proposes the development of a centralized, web-based Gym Management System designed to streamline daily operations and enhance the overall member experience.\r\n\r\nThe proposed system will feature secure, role-based dashboards tailored for administrators, trainers, and gym members. Core functionalities will include real-time membership lifecycle tracking, automated billing and subscription management, an interactive class booking workflow, and attendance monitoring. Built on a modern full-stack architecture—utilizing a responsive frontend for intuitive user navigation and a robust backend integrated with a relational database—the application ensures high data integrity and seamless scalability. By digitizing and automating these core processes, the system aims to significantly reduce administrative overhead, optimize facility resource allocation, and provide gym owners with actionable insights to drive business growth.', '/uploads/proposals/1781756337_2_month_AI-ML_Roadmap.pdf', 'Submitted', NULL, '2026-06-21 14:26:13', '2026-06-22 15:18:27');
+(4, 4, 'The fitness industry is experiencing rapid growth, yet many independent gymnasiums and fitness centers still rely on fragmented, manual, or paper-based systems for member management, billing, and scheduling. This reliance on outdated methods frequently leads to administrative inefficiencies, scheduling conflicts, and poor data tracking. This project proposes the development of a centralized, web-based Gym Management System designed to streamline daily operations and enhance the overall member experience.\r\n\r\nThe proposed system will feature secure, role-based dashboards tailored for administrators, trainers, and gym members. Core functionalities will include real-time membership lifecycle tracking, automated billing and subscription management, an interactive class booking workflow, and attendance monitoring. Built on a modern full-stack architecture—utilizing a responsive frontend for intuitive user navigation and a robust backend integrated with a relational database—the application ensures high data integrity and seamless scalability. By digitizing and automating these core processes, the system aims to significantly reduce administrative overhead, optimize facility resource allocation, and provide gym owners with actionable insights to drive business growth.', '/uploads/proposals/1781756337_2_month_AI-ML_Roadmap.pdf', 'Approved', 'good', '2026-06-21 14:26:13', '2026-06-23 11:08:29');
 
 -- --------------------------------------------------------
 
@@ -578,7 +611,7 @@ INSERT INTO `students` (`user_id`, `student_id`, `name`, `phone`, `department`, 
 (14, '2k23/SWE/048', 'Faheem Ahmed', '+923378001160', 'Software Engineering', 'avatar_1781525319_6a2feb478ec5a.png', 'Morning'),
 (15, '2k23/SWE/077', 'Kamran', '+923333333333', 'Software Engineering', 'avatar_1781537125_6a30196576338.jpg', 'Morning'),
 (16, '2k23/SWE/111', 'Muhammad Shaheer', '+923000000000', 'Software Engineering', 'avatar_1781635660_6a319a4cb33fd.png', 'Morning'),
-(18, '2K24/SWE/033', 'Fariya', '+923012345678', 'Software Engineering', 'avatar_1781756220_6a33713c3ab5a.jpg', 'Morning'),
+(18, '2K24/SWE/033', 'Akash', '+923012345678', 'Software Engineering', 'avatar_1781756220_6a33713c3ab5a.jpg', 'Morning'),
 (10025, '2k23/SWE/013', 'Adil', '+9203123456678', 'Software Engineering', 'avatar_1782115963_6a38ee7b64440.png', 'Morning');
 
 -- --------------------------------------------------------
@@ -633,17 +666,17 @@ INSERT INTO `users` (`id`, `email`, `cnic`, `password`, `role`, `status`, `creat
 (2, 'dean@fyp.com', '2222222222222', '$2y$12$R6aRPfeHg6u67TJswr.FieCt6g3eVLLPGxRK2WVK6dSHEjS/CyHR6', 'hod', 'approved', '2026-06-10 11:12:52', NULL, NULL),
 (3, 'supervisor@fyp.com', '3333333333333', '$2y$12$R6aRPfeHg6u67TJswr.FieCt6g3eVLLPGxRK2WVK6dSHEjS/CyHR6', 'supervisor', 'approved', '2026-06-10 11:12:52', NULL, NULL),
 (4, 'committee@fyp.com', '4444444444444', '$2y$12$R6aRPfeHg6u67TJswr.FieCt6g3eVLLPGxRK2WVK6dSHEjS/CyHR6', 'committee', 'approved', '2026-06-10 11:12:52', NULL, NULL),
-(5, 'student1@fyp.com', '5555555555555', '$2y$12$R6aRPfeHg6u67TJswr.FieCt6g3eVLLPGxRK2WVK6dSHEjS/CyHR6', 'student', 'approved', '2026-06-10 11:12:52', NULL, NULL),
+(5, 'student1@fyp.com', '1122233333555', '$2y$12$R6aRPfeHg6u67TJswr.FieCt6g3eVLLPGxRK2WVK6dSHEjS/CyHR6', 'student', 'approved', '2026-06-10 11:12:52', NULL, NULL),
 (6, 'student2@fyp.com', '6666666666666', '$2y$12$R6aRPfeHg6u67TJswr.FieCt6g3eVLLPGxRK2WVK6dSHEjS/CyHR6', 'student', 'approved', '2026-06-10 11:12:52', NULL, NULL),
 (7, 'student3@fyp.com', '7777777777777', '$2y$12$R6aRPfeHg6u67TJswr.FieCt6g3eVLLPGxRK2WVK6dSHEjS/CyHR6', 'student', 'approved', '2026-06-10 11:12:52', NULL, NULL),
 (9, 'teststudent@fyp.com', NULL, '$2y$12$yd08pzeqXucWsOQ9ze8xIu2uvVQ11aQiIPwRyOiDobgH0cCLE1m06', 'student', 'rejected', '2026-06-10 11:27:58', NULL, NULL),
 (10, 'akash@gmail.com', NULL, '$2y$10$E..2glqnCxEx7hMkVVCZm.OIwv4dxSBo3dHF5t61tYweQS4.M.HlG', 'student', 'approved', '2026-06-13 05:44:05', NULL, NULL),
 (11, 'm@gmail.com', '1122233333334', '$2y$12$VyrxSEMG76ULqZmYLe53o.Z6o9mw46.hTsoNf7.6.yV2gyGY37gBC', 'supervisor', 'approved', '2026-06-15 11:10:51', NULL, NULL),
 (12, 'rafiq@fyp.com', NULL, '$2y$12$CzK0cpvuiDEMRz16puZsKeoaQ9C9bcPfG3XO8juAh/W5ZBLZJjody', 'supervisor', 'approved', '2026-06-15 11:14:17', NULL, NULL),
-(14, 'faheemahmedsoomro6@gmail.com', '4310284725235', '$2y$12$/UQKttx5VgEBEm3kCUyV4.cuPtWjp83zUCvl3Ey0IeGBOH4d5xjcq', 'student', 'approved', '2026-06-15 12:08:40', '303af62d00af2bd9fe40c5b8c72f813748174fa847bea4195aed2de8bb22aae7', '2026-06-19 07:51:50'),
+(14, 'faheemahmedsoomro6@gmail.com', '4310284725235', '$2y$12$p.sSTiYIwTp4MjIT2oxzYeba.3b3zLyovqluHEeukr39aSusFmb.G', 'student', 'approved', '2026-06-15 12:08:40', '303af62d00af2bd9fe40c5b8c72f813748174fa847bea4195aed2de8bb22aae7', '2026-06-19 07:51:50'),
 (15, 'kami@gmail.com', '1234567891111', '$2y$12$QNmJ2Ff8tGQrSsGwBKtCEue.smYxjQ5NUemVQIvwUBsXwbbHxE5qK', 'student', 'approved', '2026-06-15 15:25:25', NULL, NULL),
 (16, 'sherry@gmail.com', '4310284725230', '$2y$12$MBhSz4cD7EYSz6tw673Nbu8ilg6fW9rrJFvt3Bhb3pP1DrkJlBuq6', 'student', 'approved', '2026-06-16 18:47:41', NULL, NULL),
-(18, 'mail@gmail.com', '4310284725000', '$2y$12$hTt5r9tkPg3DV/QYUVD8HOPDT5.Ot31.H3mIGyGupIrkhRBdAGQxK', 'student', 'approved', '2026-06-18 04:17:00', NULL, NULL),
+(18, 'mail@gmail.com', '4310284725000', '$2y$12$4hCD7ZTG6eWoJgaCT4sbiOtnGekSfRtT8/DQKAKHQbK1/SMOiYYQm', 'student', 'approved', '2026-06-18 04:17:00', NULL, NULL),
 (10015, 'faheemabbasi@gmail.com', NULL, '$2y$12$67JqUKIkdAoLAfU8sAz/ce/JoNr9lCkp2X48Bg/E9jupz7iMjCmb6', 'committee', 'approved', '2026-06-19 12:19:37', NULL, NULL),
 (10016, 'coordinator@fyp.com', '5555555555556', '$2y$12$R6aRPfeHg6u67TJswr.FieCt6g3eVLLPGxRK2WVK6dSHEjS/CyHR6', 'coordinator', 'approved', '2026-06-19 12:40:05', NULL, NULL),
 (10018, 'noor@fyp.com', NULL, '$2y$12$Yxo7iB10Y1M2D/w7ixJoH.5lb9mQ4xTbC4WaLx8eLP6F2UdfAwpAq', 'supervisor', 'approved', '2026-06-20 07:45:41', NULL, NULL),
@@ -671,7 +704,7 @@ ALTER TABLE `coordinators`
 --
 ALTER TABLE `deadlines`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `stage` (`stage`);
+  ADD UNIQUE KEY `stage_department` (`stage`,`department`);
 
 --
 -- Indexes for table `evaluations`
@@ -773,13 +806,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `deadlines`
 --
 ALTER TABLE `deadlines`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `evaluations`
 --
 ALTER TABLE `evaluations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT for table `groups`
@@ -803,7 +836,7 @@ ALTER TABLE `notices`
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=249;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=279;
 
 --
 -- AUTO_INCREMENT for table `projects`
